@@ -88,6 +88,13 @@ html {
 html, body, #root {
   height: 100%;
 }
+
+body {
+  /* When hovering over a show they scale up and increase in size. This seems to cause a scrollbar to appear for some
+   reason if you're at the edge of scroll. This scroll bar appearing causes a flicker as layout changes to accommodate
+   it. Forcing scrollbar here to avoid this. */
+  overflow-y: scroll;
+}
 `;
 
 export default GlobalStyles;
