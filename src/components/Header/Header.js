@@ -139,8 +139,10 @@ const NavLinkInner = styled.span`
     color: var(--color-secondary);
   }
   
+  --animation-distance: 100%;
   @media (prefers-reduced-motion: no-preference) {
-    transition: transform 200ms;
+    transition: transform 300ms;
+    will-change: transform;
   }
 `;
 
@@ -149,7 +151,7 @@ const NavLinkInnerRegular = styled(NavLinkInner)`
   
   ${NavLinkWrapper}:focus &,
   ${NavLinkWrapper}:hover & {
-    transform: translateY(-50px);
+    transform: translateY(calc(var(--animation-distance) * -1));
   }
 `;
 
@@ -157,7 +159,7 @@ const NavLinkInnerBold = styled(NavLinkInner)`
   font-weight: ${WEIGHTS.bold};
   position: absolute;
   left: 0;
-  transform: translateY(50px);
+  transform: translateY(var(--animation-distance));
   
   ${NavLinkWrapper}:focus &,
   ${NavLinkWrapper}:hover & {
