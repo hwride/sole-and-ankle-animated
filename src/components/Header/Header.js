@@ -114,7 +114,21 @@ const Filler = styled.div`
   }
 `;
 
-const NavLink = styled.a`
+function NavLink({href, children}) {
+  return <NavLinkWrapper href={href}>
+    <NavLinkInnerRegular>{children}</NavLinkInnerRegular>
+    {/* The bold text is only for the animation, hide from screen readers. */}
+    <NavLinkInnerBold aria-hidden="true">{children}</NavLinkInnerBold>
+  </NavLinkWrapper>;
+}
+
+const NavLinkWrapper = styled.a`
+  position: relative;
+  overflow: hidden;
+`;
+
+const NavLinkInner = styled.span`
+  display: inline-block;
   font-size: 1.125rem;
   text-transform: uppercase;
   text-decoration: none;
@@ -123,6 +137,31 @@ const NavLink = styled.a`
 
   &:first-of-type {
     color: var(--color-secondary);
+  }
+  
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform 200ms;
+  }
+`;
+
+const NavLinkInnerRegular = styled(NavLinkInner)`
+  transform: none;
+  
+  ${NavLinkWrapper}:focus &,
+  ${NavLinkWrapper}:hover & {
+    transform: translateY(-50px);
+  }
+`;
+
+const NavLinkInnerBold = styled(NavLinkInner)`
+  font-weight: ${WEIGHTS.bold};
+  position: absolute;
+  left: 0;
+  transform: translateY(50px);
+  
+  ${NavLinkWrapper}:focus &,
+  ${NavLinkWrapper}:hover & {
+    transform: none;
   }
 `;
 
