@@ -8,31 +8,48 @@ import { QUERIES, WEIGHTS } from '../../constants';
 import UnstyledButton from '../UnstyledButton';
 import Icon from '../Icon';
 import VisuallyHidden from '../VisuallyHidden';
+import { animated, useSpring, useTransition } from '@react-spring/web'
 
 const MobileMenu = ({ isOpen, onDismiss }) => {
+  const transitions = useTransition(isOpen, {
+    config: { duration: 150 },
+    from: { opacity: 0, x: 100 },
+    enter: { opacity: 1, x: 0 },
+    leave: { opacity: 0, x: 0 },
+    reset: !isOpen
+  });
+
   return (
-    <Overlay isOpen={isOpen} onDismiss={onDismiss}>
-      <Content aria-label="Menu">
-        <CloseButton onClick={onDismiss}>
-          <Icon id="close" />
-          <VisuallyHidden>Dismiss menu</VisuallyHidden>
-        </CloseButton>
-        <Filler />
-        <Nav>
-          <NavLink href="/sale">Sale</NavLink>
-          <NavLink href="/new">New&nbsp;Releases</NavLink>
-          <NavLink href="/men">Men</NavLink>
-          <NavLink href="/women">Women</NavLink>
-          <NavLink href="/kids">Kids</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
-        </Nav>
-        <Footer>
-          <SubLink href="/terms">Terms and Conditions</SubLink>
-          <SubLink href="/privacy">Privacy Policy</SubLink>
-          <SubLink href="/contact">Contact Us</SubLink>
-        </Footer>
-      </Content>
-    </Overlay>
+    <>
+      {transitions((styles, item) => item &&
+          <AnimatedDialogOverlay isOpen={isOpen} onDismiss={onDismiss} style={{ opacity: styles.opacity }}>
+            <AnimatedDialogContent aria-label="Menu" style={{
+              transform: styles.x.to(
+                (value) => `translate3d(${value}%, 0px, 0px)`
+              ),
+            }}>
+              <CloseButton onClick={onDismiss}>
+                <Icon id="close"/>
+                <VisuallyHidden>Dismiss menu</VisuallyHidden>
+              </CloseButton>
+              <Filler/>
+              <Nav>
+                <NavLink href="/sale">Sale</NavLink>
+                <NavLink href="/new">New&nbsp;Releases</NavLink>
+                <NavLink href="/men">Men</NavLink>
+                <NavLink href="/women">Women</NavLink>
+                <NavLink href="/kids">Kids</NavLink>
+                <NavLink href="/collections">Collections</NavLink>
+              </Nav>
+              <Footer>
+                <SubLink href="/terms">Terms and Conditions</SubLink>
+                <SubLink href="/privacy">Privacy Policy</SubLink>
+                <SubLink href="/contact">Contact Us</SubLink>
+              </Footer>
+            </AnimatedDialogContent>
+          </AnimatedDialogOverlay>
+        )}
+    </>
   );
 };
 
@@ -46,6 +63,7 @@ const Overlay = styled(DialogOverlay)`
   display: flex;
   justify-content: flex-end;
 `;
+const AnimatedDialogOverlay = animated(Overlay);
 
 const Content = styled(DialogContent)`
   background: white;
@@ -55,6 +73,7 @@ const Content = styled(DialogContent)`
   display: flex;
   flex-direction: column;
 `;
+const AnimatedDialogContent = animated(Content);
 
 const CloseButton = styled(UnstyledButton)`
   position: absolute;
